@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
 
     constructor(private nav: NavController){}
 
-    async canActivate(route: ActivatedRouteSnapshot) {
+    async canActivate() {
         if (!this.authenticated) {
             this.presentLoginModal();
         }

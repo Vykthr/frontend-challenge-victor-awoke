@@ -20,8 +20,8 @@ export class DetailsPage implements OnInit {
         public holidayService: HolidayService, private toastCtrl: ToastController
     ) {
         activatedRoute.queryParams.subscribe(params => {
-            if(router.getCurrentNavigation().extras.state) {
-              this.country = router.getCurrentNavigation().extras.state.data;
+            if(router.getCurrentNavigation()?.extras.state) {
+              this.country = router.getCurrentNavigation()?.extras.state.data;
             } else {
               nav.navigateRoot('');
             }

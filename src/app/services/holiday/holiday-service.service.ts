@@ -33,6 +33,7 @@ export class HolidayService {
         return new Promise(async (resolve, reject) => {
             try {
                 const { data } = await axios.post(`${HOLIDAY_LIVE_BASE_URL}/Countries`, {},
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     { headers: { Authorization: `Bearer ${HOLIDAY_API_KEY}` } }
                 );
                 resolve(data?.countries || []);
@@ -48,6 +49,7 @@ export class HolidayService {
             const yr = year || new Date().getFullYear();
             try {
                 const { data } = await axios.post(`${HOLIDAY_LIVE_BASE_URL}/List`,
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     { country_code: countryCode, year: yr  }, { headers: { Authorization: `Bearer ${HOLIDAY_API_KEY}` } }
                 );
                 resolve(data?.holidays || []);
