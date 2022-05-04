@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title style="text-align: center">
+            <img src="https://countryflagsapi.com/png/{{country.code}}" style="width: 40px; margin: 0 .5rem -0.3rem;" alt="flag" />
+            <span>{{country.name}}</span>
+        </ion-title>
+    </ion-toolbar>
+    <ion-toolbar style="padding: .5rem 1rem">
+        <ion-searchbar [(ngModel)]="searchQuery" placeholder="Search" type="text" [debounce]="250" showCancelButton="never" cancelButtonIcon="search"></ion-searchbar>
+        <ion-buttons slot="end">
+            <ion-button id="trigger-button">
+                <ion-icon name="filter"></ion-icon>
+            </ion-button>
+            <ion-popover trigger="trigger-button">
+              <ng-template>
+                <ion-content>
+                    <ion-list>
+                        <ion-list-header>Sort By:</ion-list-header>
+                        <ion-item (click)="this.sortValue = 'name'">
+                            <span>Name</span>
+                        </ion-item>
+                        <ion-item (click)="this.sortValue = 'date'">
+                            <span>Date</span>
+                        </ion-item>
+                    </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content
+            pullingIcon="arrow-down"
+            pullingText="Pull to refresh"
+            refreshingSpinner="bubbles"
+            refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+  
+    <div>
+        <div *ngFor="let holiday of sortedList(searchHoliday())">
+            <ion-card>
+                <ion-card-header style="padding-bottom: .5rem;">
+                    <ion-card-subtitle style="font-size: 12px;">{{getDate(holiday.date)}}</ion-card-subtitle>
+                    <ion-card-title>{{holiday.name}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <span class="details">Regions: {{ holiday.regions.join(', ')}}</span>
+                    <span class="details">Types: {{ holiday.types.join(', ')}}</span>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </div>
+
+</ion-content>

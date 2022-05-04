@@ -1,0 +1,141 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title style="text-align: center;">Holiday</ion-title>
+    </ion-toolbar>
+</ion-header>
+  
+<ion-content class="ion-padding"> 
+    <img class="mainImage" src="assets/images/holiday.png">
+    <div [ngSwitch]="segment" style="height: 100%;">
+
+        <div *ngSwitchDefault class="ion-padding">
+            <ion-segment [(ngModel)]="authPage">
+                <ion-segment-button value="login">
+                <ion-label>Login</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="register">
+                <ion-label>Register</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+    
+            <div *ngIf="authPage === 'login'">
+                <h4 class="title">User Login</h4>
+                <form [formGroup]="loginForm">
+                    <ion-item lines="none" class="form-group">
+                        <ion-input formControlName="email" value="{{signupForm.value?.email}}" type="email" placeholder="Email"
+                            required>
+                        </ion-input>
+                        <ion-icon name="mail-outline" slot="end"></ion-icon>
+                    </ion-item>
+                    <small class="error-message" *ngIf="!loginForm.controls['email'].valid && loginForm.controls['email'].touched">
+                        Please enter a valid email address
+                    </small>
+                    
+                    <ion-item class="form-group" lines="none">
+                        <ion-input value="{{signupForm.value?.password}}" formControlName="password" type="password" placeholder="Password"
+                        required>
+                        </ion-input>
+                        <ion-icon slot="end" name="lock-closed-outline"></ion-icon>
+                    </ion-item>
+                    <small class="error-message" *ngIf="!loginForm.controls['password'].valid && loginForm.controls['password'].touched">
+                        Your password needs more than 6 characters.
+                    </small>
+                    
+                    <ion-button (click)="loginUser(this.loginForm)" expand="block" [disabled]="!loginForm.valid">
+                        Login
+                    </ion-button>
+
+                    <ion-button expand="block" fill="clear" (click)="segment = 'forgotPass'">
+                        Forgot your password?
+                    </ion-button>   
+                </form>
+            </div>
+        
+            <div *ngIf="authPage === 'register'" class="reg">
+                <h4 class="title">User Registration</h4>
+                <form [formGroup]="signupForm">
+                    <ion-item lines="none" class="form-group">
+                        <ion-label position="floating">Display Name</ion-label>
+                        <ion-input 
+                            formControlName="displayName" type="text" 
+                            [class.invalid]="!signupForm.controls['displayName'].valid && signupForm.controls['displayName'].touched"
+                        ></ion-input>
+                        <ion-icon slot="end" name="person-outline"></ion-icon>
+                    </ion-item>
+                    <small class="error-message" *ngIf="!signupForm.controls['displayName'].valid  && signupForm.controls['displayName'].touched">
+                        Enter a valid name
+                    </small>
+
+                            
+                    <ion-item lines="none" class="form-group">
+                        <ion-label position="floating">Email</ion-label>
+                        <ion-input formControlName="email" type="email"
+                            [class.invalid]="!signupForm.controls['email'].valid && signupForm.controls['email'].touched">
+                        </ion-input>
+                        <ion-icon slot="end" name="mail-outline"></ion-icon>
+                    </ion-item>
+                    <small class="error-message" *ngIf="!signupForm.controls['email'].valid && signupForm.controls['email'].touched">
+                        Please enter a valid email
+                    </small>
+
+        
+                    <ion-item lines="none" class="form-group">
+                        <ion-label position="floating">Password</ion-label>
+                        <ion-input formControlName="password" type="password" 
+                            [class.invalid]="!signupForm.controls['password'].valid && signupForm.controls['password'].touched">
+                        </ion-input>
+                        <ion-icon slot="end" name="lock-closed-outline"></ion-icon>
+                    </ion-item>
+                    <small class="error-message" *ngIf="!signupForm.controls['password'].valid  && signupForm.controls['password'].touched">
+                        Your password needs more than 6 characters
+                    </small>
+                    
+                    <ion-item lines="none" class="form-group">
+                        <ion-label position="floating">Confirm Password</ion-label>
+                        <ion-input formControlName="conPassword" type="password"
+                            [class.invalid]="signupForm.controls['password'].value !== signupForm.controls['conPassword'].value && signupForm.controls['conPassword'].touched">
+                        </ion-input>
+                        <ion-icon slot="end" name="lock-closed-outline"></ion-icon>
+                    </ion-item>
+                    <small class="error-message" *ngIf="signupForm.controls['password'].value !== signupForm.controls['conPassword'].value && signupForm.controls['password'].touched">
+                        Must be the same a Password Field
+                    </small>
+                
+                    <ion-button expand="block" (click)="signupUser(signupForm)" [disabled]="signupForm.invalid || signupForm.controls['password'].value !== signupForm.controls['conPassword'].value">
+                        Create Account
+                    </ion-button>
+                </form>
+            </div>
+        </div>
+            
+        <div *ngSwitchCase="'forgotPass'" class="ion-padding">
+            <h4 class="title">Password Reset</h4>
+            <form [formGroup]="resetPasswordForm">
+                <ion-item><ion-input formControlName="email" type="email" placeholder="Email" 
+                [class.invalid]="!resetPasswordForm.controls['email'].valid && resetPasswordForm.controls['email'].touched"></ion-input>
+                </ion-item>
+                <small class="error-message" *ngIf="!resetPasswordForm.controls['email'].valid && resetPasswordForm.controls['email'].touched">
+                    Please enter a valid email
+                </small>
+            
+                <ion-button expand="block" (click)="resetPassword(resetPasswordForm)" [disabled]="!resetPasswordForm.valid">
+                    Reset your Password
+                </ion-button>
+        
+                <ion-button expand="block" fill="clear" (click)="segment = 'login'">
+                    Remember Password?
+                </ion-button>
+            </form>
+        </div>
+    
+        <div *ngSwitchCase="'success'" class="ion-padding">
+            <ion-slide>
+                <div class="slide">
+                    <h4>Congratulations!!!</h4>
+                    <p>A link has been sent to your Email Address<br>Confirm Email Address<br>Go to dashboard to update details.</p>
+                    <ion-button (click)="segment = 'login'" fill="clear">Click to Login <ion-icon slot="end" name="log-in-outline"></ion-icon></ion-button>
+                </div>
+            </ion-slide>
+        </div>
+    </div>
+</ion-content>
